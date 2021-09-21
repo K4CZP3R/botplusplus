@@ -26,13 +26,17 @@ export class AssignCounterDiscordCommand implements DiscordCommand {
 
         let keys = Object.keys(CounterType);
         let values = Object.values(CounterType)
+
+
         keys.forEach((key) => {
             toReturn.choices.push({
-                name: values[key.indexOf(key)],
+                name: values[keys.indexOf(key)],
                 value: key
             })
 
         })
+
+        console.log(toReturn.choices)
 
         return toReturn;
     }

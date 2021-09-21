@@ -49,7 +49,9 @@ export default class App {
     }
     onReady(c: any): void {
         console.log(`Ready! Logged in as ${c.user.tag}`)
-        this.discordCommands.registerCommands('889870836247437362')
+        this.discordClient.guilds.cache.map(guild => guild.id).forEach((gId) => {
+            this.discordCommands.registerCommands(gId)
+        })
     }
 
     start(): void {

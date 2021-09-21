@@ -1,3 +1,4 @@
 export enum CounterType {
-    Binary = "Binary"
+    Binary = "Binary",
+    Decimal = "Decimal"
 }

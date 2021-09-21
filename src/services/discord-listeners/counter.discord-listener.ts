@@ -18,6 +18,8 @@ export class CounterDiscordListener implements DiscordListener {
         if (counterType === null) {
             throw new Error("Counter type not set.")
         }
+
+        console.log("from redis", counterType, "from class", this.counterType)
         return counterType === this.counterType
     }
     private async getMeta(guildId: string, channelId: string): Promise<CounterMeta> {
