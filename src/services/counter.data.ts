@@ -9,6 +9,11 @@ export class CounterData {
         this.store = getStore();
     }
 
+    async removeCounter(guildId: string, channelId: string): Promise<void> {
+        await this.store.removeKey(`pref-${guildId}.${channelId}`)
+        await this.store.removeKey(`meta-${guildId}.${channelId}`)
+    }
+
 
     async setCounterPreference(guildId: string, channelId: string, counterType: CounterType): Promise<string | null> {
         return this.store.sendToCache<CounterType>(`pref-${guildId}.${channelId}`, counterType);
