@@ -1,14 +1,16 @@
 export default function removeIdsFromString(data: string): string {
-    if (!data.includes('<#')) {
-        console.log("data", data)
-        return data
+    if (data.includes('<')) {
+        let sIdx = data.search('<');
+
+        let eIdx = data.search('>') + sIdx;
+
+        let newData = data.substring(0, sIdx) + data.substring(eIdx + 1)
+        return removeIdsFromString(newData)
     }
 
+    return data;
 
-    let startIdx = data.search('<#');
-    let lastIdx = data.substring(startIdx).search('>');
 
-    let cleaner = data.substring(0, startIdx) + data.substring(lastIdx + 1);
 
-    return removeIdsFromString(cleaner)
+
 }
