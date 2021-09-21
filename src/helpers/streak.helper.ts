@@ -1,30 +1,28 @@
-export function streakTime(value: number): string | undefined {
+export function streakTime(value: number): string[] {
     switch (value) {
         case 1:
-            return '1️⃣'
+            return ['1️⃣']
         case 5:
-            return '5️⃣'
+            return ['5️⃣']
         case 10:
-            return '🔟'
+            return ['🔟']
         case 19:
-            return '🔞'
+            return ['🔞']
         case 69:
-            return '👌'
+            return ['👌']
         case 100:
-            return '💯'
+            return ['💯']
         case 418:
-            return '🫖'
+            return ['🫖']
         case 420:
-            return '🚬'
+            return ['🚬']
         case 421:
-            return '🚭'
-        case 910:
-            return '🛫'
+            return ['🚭']
         case 911:
-            return '🛩'
+            return ['🛫', '🛩', '🏢']
         case 1234:
-            return '🔢'
+            return ['🔢']
         default:
-            return undefined;
+            return [];
     }
 }

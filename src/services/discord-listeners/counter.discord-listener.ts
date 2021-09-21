@@ -71,8 +71,8 @@ export class CounterDiscordListener implements DiscordListener {
                 await this.counterData.setCounterMeta(message.guildId, message.channelId, decValue, message.author.id);
                 await message.react('✅')
                 let streakEmoji = streakTime(decValue)
-                if (streakEmoji) {
-                    await message.react(streakEmoji)
+                if (streakEmoji.length > 0) {
+                    streakEmoji.forEach(async (emoji) => await message.react(emoji))
                 }
             }
             return true;
