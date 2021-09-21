@@ -1,5 +1,6 @@
 import { Message } from "discord.js";
 import removeIdsFromString from "../../helpers/discord-messages.helper";
+import { streakTime } from "../../helpers/streak.helper";
 import { CounterMeta } from "../../interfaces/counter-meta.interface";
 import { DiscordListener } from "../../interfaces/discord-listener.interface";
 import { CounterType } from "../../interfaces/enum/counter-type";
@@ -52,7 +53,9 @@ export class CounterDiscordListener implements DiscordListener {
 
             let counterMeta = await this.getMeta(guildId, channelId);
             let validUser = counterMeta.byUser !== message.author.id
+            // let validUser = true;
             let validValue = counterMeta.value + 1 === decValue
+            // let validValue = true;
 
 
 
@@ -65,8 +68,12 @@ export class CounterDiscordListener implements DiscordListener {
                     await message.reply(`Failed because you did the last count`)
             }
             else {
-                await message.react('✅')
                 await this.counterData.setCounterMeta(message.guildId, message.channelId, decValue, message.author.id);
+                await message.react('✅')
+                let streakEmoji = streakTime(decValue)
+                if (streakEmoji) {
+                    await message.react(streakEmoji)
+                }
             }
             return true;
         }

@@ -7,7 +7,7 @@ export default function getAllDiscordListeners(): DiscordListener[] {
 
     return [
         new BinCounterDiscordListener(),
-        new DecCounterDiscordListener()
+        new DecCounterDiscordListener(),
     ]
 
 }
