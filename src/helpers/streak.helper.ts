@@ -18,6 +18,10 @@ export function streakTime(value: number): string | undefined {
             return '🚬'
         case 421:
             return '🚭'
+        case 910:
+            return '🛫'
+        case 911:
+            return '🛩'
         case 1234:
             return '🔢'
         default:
