@@ -1,39 +1,22 @@
 import { Message } from "discord.js";
+import { CounterMeta } from "../../interfaces/counter-meta.interface";
 import { DiscordListener } from "../../interfaces/discord-listener.interface";
 import { CounterType } from "../../interfaces/enum/counter-type";
 import { CounterData } from "../counter.data";
+import { CounterDiscordListener } from "./counter.discord-listener";
 
-export class BinCounterDiscordListener implements DiscordListener {
-    listenForNewMessages = true;
-    counterData: CounterData
-    counterType: CounterType = CounterType.Binary;
+export class BinCounterDiscordListener extends CounterDiscordListener {
 
-    constructor() {
-        this.counterData = new CounterData();
-    }
+    counterType = CounterType.Binary;
 
-    private async inValidChannel(message: Message): Promise<boolean> {
-        if (!message.guildId)
-            return false;
-
-        let counterType = await this.counterData.getCounterPreference(message.guildId, message.channelId)
-        if (counterType === null) {
-            return false;
+    processSpecificNumberType(message: Message): number {
+        let binaryMatches = message.content.replace(/ /g, '').match(new RegExp(/[0-1]+/g))
+        if (binaryMatches === null || binaryMatches.length === 0) {
+            throw new Error("Can't find binary here.")
         }
-
-        console.log(counterType, this.counterType)
-        return counterType === this.counterType
+        return parseInt(binaryMatches[0], 2)
     }
 
-    async processMessage(message: Message): Promise<boolean> {
-        if (!await this.inValidChannel(message)) {
-            console.log("Not for me!")
-            return false;
-        }
 
-        console.log(message.content.match(new RegExp(/\d+/g)))
-        return true;
-
-    }
 
 }

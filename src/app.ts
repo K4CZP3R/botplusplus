@@ -1,4 +1,4 @@
-import { Client, Guild, Intents, Interaction } from "discord.js";
+import { Client, Guild, Intents, Interaction, Message } from "discord.js";
 import { getStore } from "./helpers/store.helper";
 import Store from "./interfaces/store.interface";
 import { DiscordCommands } from "./services/discord-commands.service";
@@ -43,7 +43,8 @@ export default class App {
         console.log("Adding commands to a new guild!")
         this.discordCommands.registerCommands(guild.id)
     }
-    async onMessageCreate(message: any) {
+    async onMessageCreate(message: Message) {
+        if (message.author.bot) return;
         this.discordListeners.handleNewMessage(message);
     }
     onReady(c: any): void {
