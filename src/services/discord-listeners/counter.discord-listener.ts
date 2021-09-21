@@ -52,8 +52,8 @@ export class CounterDiscordListener implements DiscordListener {
             let decValue = this.processSpecificNumberType(message);
 
             let counterMeta = await this.getMeta(guildId, channelId);
-            let validUser = counterMeta.byUser !== message.author.id
-            // let validUser = true;
+            // let validUser = counterMeta.byUser !== message.author.id
+            let validUser = true;
             let validValue = counterMeta.value + 1 === decValue
             // let validValue = true;
 
