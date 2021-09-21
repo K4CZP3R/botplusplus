@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder, SlashCommandStringOption } from "@discordjs/builders";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import getEnv from "../helpers/dotenv.helper";
@@ -33,13 +33,19 @@ export class DiscordCommands {
                 .setDescription(command.description)
 
             command.inputs.forEach((input) => {
-                slashCommand.addStringOption(option => option.setName(input.inputName).setDescription(input.inputDescription).setRequired(true))
+                let option: SlashCommandStringOption = new SlashCommandStringOption().setName(input.inputName).setDescription(input.inputDescription);
+
+                input.choices.forEach((choice) => {
+                    option = option.addChoice(choice.name, choice.value)
+                })
+
+                option = option.setRequired(true)
+
+
+                slashCommand.addStringOption(option);
             })
 
-            commandsArray.push(command)
-
-
-
+            commandsArray.push(slashCommand)
         })
         commandsArray.map(command => command.toJSON());
         return commandsArray;

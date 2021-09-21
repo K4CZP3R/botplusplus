@@ -7,12 +7,15 @@ export class AssignCounterDiscordCommand implements DiscordCommand {
     inputs = [
         {
             inputName: "counter_type",
-            inputDescription: "Counter type to assign"
+            inputDescription: "Counter type to assign",
+            choices: [{ name: "Hexadecimaal", value: "hex" }]
         }
     ]
 
     async processCommand(interaction: any): Promise<boolean> {
-        interaction.reply("Yeah in channel id " + interaction.channelId)
+        let counterType = interaction.options.getString("counter_type")
+
+        interaction.reply(`Counter ${counterType} in channel ${interaction.channel.id}`)
         return true
 
     }
