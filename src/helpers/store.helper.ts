@@ -1,6 +1,6 @@
 import Store from "../interfaces/store.interface";
-import InMemoryStore from "../services/in-memory.store";
+import RedisStore from "../services/redis.store";
 
 export function getStore(): Store {
-    return new InMemoryStore();
+    return new RedisStore();
 }
