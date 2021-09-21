@@ -4,15 +4,16 @@ import { DiscordCommandInput } from "../../interfaces/discord-command-input.inte
 import { DiscordCommand } from "../../interfaces/discord-command.interface";
 import { CounterType } from "../../interfaces/enum/counter-type";
 import Store from "../../interfaces/store.interface";
+import { CounterData } from "../counter.data";
 
 export class AssignCounterDiscordCommand implements DiscordCommand {
     name = "counterhere"
     description = "Assigns specific counter for this channel."
     inputs: DiscordCommandInput[]
-    store: Store
+    counterData: CounterData
 
     constructor() {
-        this.store = getStore();
+        this.counterData = new CounterData();
         this.inputs = this.generateInputs();
     }
 
@@ -36,15 +37,19 @@ export class AssignCounterDiscordCommand implements DiscordCommand {
         return toReturn;
     }
 
-
     generateInputs(): DiscordCommandInput[] {
         return [this.counterTypeInput()]
     }
 
+
+
     async processCommand(interaction: any): Promise<boolean> {
         let counterType = interaction.options.getString("counter_type")
 
+        let resp = await this.counterData.setCounterPreference(interaction.guildId, interaction.channelId, counterType as CounterType)
+        console.log(resp)
         interaction.reply(`From now on, this channel is a counting channel with type \`${counterType}\``)
+
         return true
     }
 }
