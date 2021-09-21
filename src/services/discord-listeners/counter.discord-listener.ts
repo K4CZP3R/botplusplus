@@ -1,4 +1,5 @@
 import { Message } from "discord.js";
+import removeIdsFromString from "../../helpers/discord-messages.helper";
 import { CounterMeta } from "../../interfaces/counter-meta.interface";
 import { DiscordListener } from "../../interfaces/discord-listener.interface";
 import { CounterType } from "../../interfaces/enum/counter-type";
@@ -44,6 +45,8 @@ export class CounterDiscordListener implements DiscordListener {
             if (!await this.inValidChannel(guildId, channelId)) {
                 return false;
             }
+
+            message.content = removeIdsFromString(message.content);
 
             let decValue = this.processSpecificNumberType(message);
 
