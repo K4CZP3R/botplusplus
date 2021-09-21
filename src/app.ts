@@ -1,4 +1,5 @@
 import { Client, Guild, Intents, Interaction } from "discord.js";
+import { getStore } from "./helpers/store.helper";
 import Store from "./interfaces/store.interface";
 import { DiscordCommands } from "./services/discord-commands.service";
 
@@ -7,13 +8,12 @@ import { DiscordCommands } from "./services/discord-commands.service";
 export default class App {
 
     private discordClient = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
-    private cacheService: Store;
+    private cacheService: Store = getStore();
     private discordCommands: DiscordCommands
 
     private botToken: string
-    constructor(discordToken: string, cacheService: Store, clientId: string) {
+    constructor(discordToken: string, clientId: string) {
         this.botToken = discordToken;
-        this.cacheService = cacheService;
 
         this.discordCommands = new DiscordCommands(discordToken, clientId)
 
@@ -37,13 +37,8 @@ export default class App {
     }
 
     async onGuildJoin(guild: Guild) {
-
-        console.log("Joined to", guild);
         console.log("Adding commands!")
-
         this.discordCommands.registerCommands(guild.id)
-
-
     }
     async onMessageCreate(message: any) {
         // console.log(message)

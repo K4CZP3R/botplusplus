@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 import getEnv from './helpers/dotenv.helper';
 import App from "./app";
 import InMemoryStore from './services/in-memory.store';
+import { getStore } from './helpers/store.helper';
 
 dotenv.config();
 
@@ -14,6 +15,6 @@ if (!env.DISCORD_TOKEN) {
     process.exit(1);
 }
 
-let app = new App(env.DISCORD_TOKEN, new InMemoryStore(), env.DISCORD_CLIENT_ID);
+let app = new App(env.DISCORD_TOKEN, env.DISCORD_CLIENT_ID);
 
 app.start();

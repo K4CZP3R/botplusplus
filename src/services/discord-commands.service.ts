@@ -38,10 +38,7 @@ export class DiscordCommands {
                 input.choices.forEach((choice) => {
                     option = option.addChoice(choice.name, choice.value)
                 })
-
                 option = option.setRequired(true)
-
-
                 slashCommand.addStringOption(option);
             })
 
