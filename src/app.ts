@@ -51,7 +51,8 @@ export default class App {
     }
     async onMessageCreate(message: Message) {
         if (message.author.bot) return;
-        this.discordListeners.handleNewMessage(message);
+
+        this.discordListeners.handleNewMessage(message)
     }
     onReady(c: any): void {
         console.log(`Ready! Logged in as ${c.user.tag}`)
