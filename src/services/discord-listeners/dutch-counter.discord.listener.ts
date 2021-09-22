@@ -16,9 +16,9 @@ export class DutchCounterDiscordListener extends CounterDiscordListener {
     whatAmI(message: string): number | undefined {
         let iAm: number | undefined = undefined
         for (let i = 0; i < 10000; i++) {
-            let word = (n2words(i, { lang: 'nl' }) as string).normalize('NFC').replace('ë', 'e').toLowerCase();
+            let word = (n2words(i, { lang: 'nl' }) as string).replace(/ /g, '').normalize('NFC').replace('ë', 'e').toLowerCase();
 
-
+            // console.log(word)
             if (word === message) {
                 iAm = i;
                 break;
@@ -34,6 +34,7 @@ export class DutchCounterDiscordListener extends CounterDiscordListener {
             throw new Error("Can't find dutch here.")
         }
 
+        console.log("searching for", nlMatches)
         let typed = this.whatAmI(nlMatches);
         if (!typed) {
             throw new Error("Can't recognize it!");
