@@ -25,10 +25,7 @@
     "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
     "mongoose": "^6.0.7",
-    "n2words": "^1.10.0",
-    "redis": "^4.0.0-rc.1",
-    "to-words": "^3.0.0",
-    "unorm": "^1.6.0"
+    "n2words": "^1.10.0"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
