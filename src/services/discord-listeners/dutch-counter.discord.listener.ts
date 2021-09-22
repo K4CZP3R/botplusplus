@@ -4,7 +4,7 @@ import { DiscordListener } from "../../interfaces/discord-listener.interface";
 import { CounterType } from "../../interfaces/enum/counter-type";
 import { CounterData } from "../counter.data";
 import { CounterDiscordListener } from "./counter.discord-listener";
-import n2words from 'n2words'
+const n2words = require('n2words')
 
 
 
