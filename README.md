@@ -11,6 +11,7 @@
 - [x] Hex counter
 - [x] Dutch counter
 - [x] Morse counter
+- [ ] Roulette counter
 - [ ] Roman counter
 - [ ] Bin BCD counter
 - [ ] Base64 counter
