@@ -4,6 +4,7 @@ import { streakTime } from "../../helpers/streak.helper";
 import { CounterMeta } from "../../interfaces/counter-meta.interface";
 import { DiscordListener } from "../../interfaces/discord-listener.interface";
 import { CounterType } from "../../interfaces/enum/counter-type";
+import { ICounterMeta } from "../../interfaces/models/counter-meta.model";
 import { CounterData } from "../counter.data";
 
 export class CounterDiscordListener implements DiscordListener {
@@ -16,15 +17,14 @@ export class CounterDiscordListener implements DiscordListener {
     }
 
     private async inValidChannel(guildId: string, channelId: string): Promise<boolean> {
-        let counterType = await this.counterData.getCounterPreference(guildId, channelId)
-        if (counterType === null) {
+        let counterPreferences = await this.counterData.getCounterPreference(guildId, channelId)
+        if (counterPreferences === null) {
             throw new Error("Counter type not set.")
         }
 
-        console.log("from redis", counterType, "from class", this.counterType)
-        return counterType === this.counterType
+        return counterPreferences.counterType === this.counterType
     }
-    private async getMeta(guildId: string, channelId: string): Promise<CounterMeta> {
+    private async getMeta(guildId: string, channelId: string): Promise<ICounterMeta> {
         let meta = await this.counterData.getCounterMeta(guildId, channelId)
         if (meta === null)
             throw new Error("meta does not exist!");
@@ -52,9 +52,9 @@ export class CounterDiscordListener implements DiscordListener {
             let decValue = this.processSpecificNumberType(message);
 
             let counterMeta = await this.getMeta(guildId, channelId);
-            let validUser = counterMeta.byUser !== message.author.id
+            let validUser = counterMeta.countedByUserId !== message.author.id
             //let validUser = true;
-            let validValue = counterMeta.value + 1 === decValue
+            let validValue = counterMeta.counterValue + 1 === decValue
             // let validValue = true;
 
 
@@ -63,7 +63,7 @@ export class CounterDiscordListener implements DiscordListener {
                 await this.counterData.setCounterMeta(message.guildId, message.channelId, 0, "");
                 await message.react('❌')
                 if (!validValue)
-                    await message.reply(`Failed, reason: \`Invalid value, should be: ${counterMeta.value + 1} and it was ${decValue}\``)
+                    await message.reply(`Failed, reason: \`Invalid value, should be: ${counterMeta.counterValue + 1} and it was ${decValue}\``)
                 if (!validUser)
                     await message.reply(`Failed because you did the last count`)
             }
