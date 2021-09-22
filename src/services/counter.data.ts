@@ -1,37 +1,59 @@
-import { getStore } from "../helpers/store.helper";
-import { CounterMeta } from "../interfaces/counter-meta.interface";
+import { connect } from "mongoose";
 import { CounterType } from "../interfaces/enum/counter-type";
-import Store from "../interfaces/store.interface";
+import CounterMeta, { ICounterMeta } from "../interfaces/models/counter-meta.model";
+import CounterPreference, { ICounterPreference } from "../interfaces/models/counter-preference.model";
 
 export class CounterData {
-    store: Store
-    constructor() {
-        this.store = getStore();
-    }
 
     async removeCounter(guildId: string, channelId: string): Promise<void> {
-        await this.store.removeKey(`pref-${guildId}.${channelId}`)
-        await this.store.removeKey(`meta-${guildId}.${channelId}`)
+        await CounterMeta.findOneAndRemove({ guildId: guildId, channelId: channelId })
+        await CounterPreference.findOneAndRemove({ guildId: guildId, channelId: channelId })
     }
 
 
-    async setCounterPreference(guildId: string, channelId: string, counterType: CounterType): Promise<string | null> {
-        return this.store.sendToCache<CounterType>(`pref-${guildId}.${channelId}`, counterType);
-    }
-    async getCounterPreference(guildId: string, channelId: string): Promise<CounterType> {
-        return this.store.readFromCache<CounterType>(`pref-${guildId}.${channelId}`)
-    }
+    async setCounterPreference(guildId: string, channelId: string, counterType: CounterType): Promise<ICounterPreference> {
+        let currentCounterPref: ICounterPreference | null = await CounterPreference.findOne({ guildId: guildId, channelId: channelId })
 
-    async setCounterMeta(guildId: string, channelId: string, counterValue: number, byUser: string): Promise<string | null> {
-        let counterMeta: CounterMeta = {
-            value: counterValue,
-            byUser: byUser
+        if (currentCounterPref !== null) {
+            currentCounterPref.counterType = counterType;
+            return await currentCounterPref.save();
+
         }
-        return this.store.sendToCache<CounterMeta>(`meta-${guildId}.${channelId}`, counterMeta);
+        else {
+            let newPreference: ICounterPreference = new CounterPreference({
+                guildId: guildId,
+                channelId: channelId,
+                counterType: counterType
+            })
+
+            return await newPreference.save();
+        }
+    }
+    async getCounterPreference(guildId: string, channelId: string): Promise<ICounterPreference | null> {
+        return await CounterPreference.findOne({ guildId: guildId, channelId: channelId })
     }
 
-    async getCounterMeta(guildId: string, channelId: string): Promise<CounterMeta> {
-        return this.store.readFromCache<CounterMeta>(`meta-${guildId}.${channelId}`)
+    async setCounterMeta(guildId: string, channelId: string, counterValue: number, byUser: string): Promise<ICounterMeta | null> {
+        let currentMeta: ICounterMeta | null = await CounterMeta.findOne({ guildId: guildId, channelId: channelId })
+        if (currentMeta !== null) {
+            currentMeta.counterValue = counterValue;
+            currentMeta.countedByUserId = byUser;
+            return await currentMeta.save();
+        }
+        else {
+            let newMeta: ICounterMeta = new CounterMeta({
+                guildId: guildId,
+                channelId: channelId,
+                counterValue: counterValue,
+                countedByUserId: byUser
+            })
+
+            return await newMeta.save();
+        }
+    }
+
+    async getCounterMeta(guildId: string, channelId: string): Promise<ICounterMeta | null> {
+        return await CounterMeta.findOne({ guildId: guildId, channelId: channelId });
     }
 
 }

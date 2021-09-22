@@ -19,7 +19,7 @@ export class ReadCounterDiscordCommand implements DiscordCommand {
             if (!counterType)
                 interaction.reply("Type not set!")
             else
-                interaction.reply(`Type of the counter here is \`${counterType}\``)
+                interaction.reply(`Type of the counter here is \`${counterType.counterType}\``)
             return true
         }
         catch (e) {

@@ -1,6 +1,6 @@
 import { Client, Guild, Intents, Interaction, Message } from "discord.js";
-import { getStore } from "./helpers/store.helper";
-import Store from "./interfaces/store.interface";
+import { connect } from "mongoose";
+import { connectToMongoDb } from "./helpers/data.helper";
 import { DiscordCommands } from "./services/discord-commands.service";
 import { DiscordListeners } from "./services/discord-listeners.service";
 
@@ -9,7 +9,6 @@ import { DiscordListeners } from "./services/discord-listeners.service";
 export default class App {
 
     private discordClient = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
-    private cacheService: Store = getStore();
     private discordCommands: DiscordCommands
     private discordListeners: DiscordListeners;
 
@@ -19,6 +18,13 @@ export default class App {
 
         this.discordCommands = new DiscordCommands(discordToken, clientId)
         this.discordListeners = new DiscordListeners();
+
+
+        connectToMongoDb().then(() => {
+            console.log("Connected to the db!")
+        })
+
+
 
 
         this.discordClient.once('ready', this.onReady.bind(this));
