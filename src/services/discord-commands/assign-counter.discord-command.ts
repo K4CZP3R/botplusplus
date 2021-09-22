@@ -34,8 +34,6 @@ export class AssignCounterDiscordCommand implements DiscordCommand {
 
         })
 
-        console.log(toReturn.choices)
-
         return toReturn;
     }
 
@@ -50,7 +48,6 @@ export class AssignCounterDiscordCommand implements DiscordCommand {
 
         let resp = await this.counterData.setCounterPreference(interaction.guildId, interaction.channelId, counterType as CounterType)
         await this.counterData.setCounterMeta(interaction.guildId, interaction.channelId, 0, "")
-        console.log(resp)
         interaction.reply(`From now on, this channel is a counting channel with type \`${counterType}\``)
 
         return true

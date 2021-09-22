@@ -1,7 +1,6 @@
 import { Message } from "discord.js";
 import removeIdsFromString from "../../helpers/discord-messages.helper";
 import { streakTime } from "../../helpers/streak.helper";
-import { CounterMeta } from "../../interfaces/counter-meta.interface";
 import { DiscordListener } from "../../interfaces/discord-listener.interface";
 import { CounterType } from "../../interfaces/enum/counter-type";
 import { ICounterMeta } from "../../interfaces/models/counter-meta.model";
@@ -52,8 +51,8 @@ export class CounterDiscordListener implements DiscordListener {
             let decValue = this.processSpecificNumberType(message);
 
             let counterMeta = await this.getMeta(guildId, channelId);
-            let validUser = counterMeta.countedByUserId !== message.author.id
-            //let validUser = true;
+            // let validUser = counterMeta.countedByUserId !== message.author.id
+            let validUser = true;
             let validValue = counterMeta.counterValue + 1 === decValue
             // let validValue = true;
 
@@ -61,19 +60,28 @@ export class CounterDiscordListener implements DiscordListener {
 
             if (!validUser || !validValue) {
                 await this.counterData.setCounterMeta(message.guildId, message.channelId, 0, "");
-                await message.react('❌')
+
+
+                let promises: Promise<any>[] = []
+
+                promises.push(message.react('❌'));
                 if (!validValue)
-                    await message.reply(`Failed, reason: \`Invalid value, should be: ${counterMeta.counterValue + 1} and it was ${decValue}\``)
+                    promises.push(message.reply(`Failed, reason: \`Invalid value, should be: ${counterMeta.counterValue + 1} and it was ${decValue}\``))
                 if (!validUser)
-                    await message.reply(`Failed because you did the last count`)
+                    promises.push(message.reply(`Failed because you did the last count`))
+                await Promise.all(promises)
+
             }
             else {
                 await this.counterData.setCounterMeta(message.guildId, message.channelId, decValue, message.author.id);
-                await message.react('✅')
-                let streakEmoji = streakTime(decValue)
-                if (streakEmoji.length > 0) {
-                    streakEmoji.forEach(async (emoji) => await message.react(emoji))
-                }
+                let promises: Promise<any>[] = []
+                promises.push(message.react('✅'))
+                streakTime(decValue).forEach((emoji) => {
+                    promises.push(message.react(emoji))
+                })
+
+                await Promise.all(promises)
+
             }
             return true;
         }

@@ -13,14 +13,11 @@ export class DiscordListeners {
     }
 
     async handleNewMessage(message: Message) {
-        let filtered = this.listeners
+        this.listeners
             .filter((listener) => listener.listenForNewMessages)
-        console.log(filtered.length)
-        filtered.forEach(async (listener) => {
-            console.log("Executing listener", listener)
-            await listener.processMessage(message)
-        }
-        )
+            .forEach(async (listener) => {
+                await listener.processMessage(message)
+            })
     }
 
 }
