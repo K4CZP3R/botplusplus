@@ -2,5 +2,6 @@ export enum CounterType {
     Binary = "Binary",
     Decimal = "Decimal",
     Hexadecimal = "Hexadecimal",
-    Morse = "Morse"
+    Morse = "Morse",
+    Dutch = "Dutch"
 }

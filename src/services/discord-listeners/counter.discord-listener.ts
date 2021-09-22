@@ -30,7 +30,7 @@ export class CounterDiscordListener implements DiscordListener {
         return meta;
     }
 
-    processSpecificNumberType(message: Message): number {
+    processSpecificNumberType(message: Message,): number {
         return 0;
     }
 
@@ -48,13 +48,16 @@ export class CounterDiscordListener implements DiscordListener {
 
             message.content = removeIdsFromString(message.content);
 
+
+
+
             let decValue = this.processSpecificNumberType(message);
+
 
             let counterMeta = await this.getMeta(guildId, channelId);
             let validUser = counterMeta.countedByUserId !== message.author.id
-            // let validUser = true;
             let validValue = counterMeta.counterValue + 1 === decValue
-            // let validValue = true;
+
 
 
 
